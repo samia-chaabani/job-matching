@@ -1,0 +1,30 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: jobs_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  postgres:
+    image: postgres:16
+    container_name: jobs_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: jobs_dw
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  metabase:
+    image: metabase/metabase
+    container_name: jobs_metabase
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongo_data:
+  pg_data:
