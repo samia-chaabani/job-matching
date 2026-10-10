@@ -226,18 +226,20 @@ def main():
     dim_lieu_db = spark.read.jdbc(url=PG_URL, table="dim_lieu", properties=PG_PROPS)
     dim_ent_db = spark.read.jdbc(url=PG_URL, table="dim_entreprise", properties=PG_PROPS)
     dim_temps_db = spark.read.jdbc(url=PG_URL, table="dim_temps", properties=PG_PROPS)
+    dim_contrat_db = spark.read.jdbc(url=PG_URL, table="dim_contrat", properties=PG_PROPS)
 
     df_fait = (
         df_clean
         .join(dim_lieu_db, df_clean["ville"] == dim_lieu_db["ville"], "left")
         .join(dim_ent_db, df_clean["entreprise"] == dim_ent_db["nom"], "left")
         .join(dim_temps_db, df_clean["date_publication"] == dim_temps_db["date_complete"], "left")
+        .join(dim_contrat_db, df_clean["type_contrat"] == dim_contrat_db["type_contrat"], "left")
         .select(
             col("source_id"),
             col("titre"),
             col("id_entreprise"),
             col("id_lieu"),
-            lit(None).cast(IntegerType()).alias("id_contrat"),
+            col("id_contrat"),
             col("id_temps"),
             col("experience_min"),
             col("experience_max"),

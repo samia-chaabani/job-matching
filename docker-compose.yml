@@ -23,7 +23,7 @@ services:
     image: metabase/metabase
     container_name: jobs_metabase
     ports:
-      - "3000:3000"
+      - "3001:3000"
 
 volumes:
   mongo_data:
