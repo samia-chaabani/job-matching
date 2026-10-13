@@ -1,0 +1,6 @@
+pymongo
+requests
+beautifulsoup4
+scrapy
+psycopg2-binary
+pyspark
