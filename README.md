@@ -279,6 +279,27 @@ Bases de données : PostgreSQL, MongoDB
 □ Amélioration du matching (fine-tuning du modèle)
 
 □ Déploiement cloud (AWS/GCP)
+## 📊 Monitoring & Orchestration
+
+### Apache Airflow (Orchestration)
+- DAG `job_market_pipeline` exécuté toutes les 6h
+- Scraping en parallèle + ETL séquentiel
+- Interface : http://localhost:8080 (admin/admin)
+
+### Prometheus + Grafana (Monitoring temps réel)
+- Collecte des métriques PostgreSQL, MongoDB
+- Dashboard temps réel avec 8 panneaux
+- Interface : http://localhost:3002 (admin/admin)
+
+### URLs des services
+
+| Service | URL | Login |
+| :--- | :--- | :--- |
+| Metabase | http://localhost:3001 | — |
+| Streamlit | http://localhost:8501 | — |
+| Airflow | http://localhost:8080 | admin/admin |
+| Grafana | http://localhost:3002 | admin/admin |
+| Prometheus | http://localhost:9090 | — |
 
 👤 Auteure
 
