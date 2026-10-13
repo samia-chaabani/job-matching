@@ -1,0 +1,65 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - monitoring
+      - job-matching_default
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitoring
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://admin:admin@jobs_postgres:5432/jobs_dw?sslmode=disable"
+    ports:
+      - "9187:9187"
+    networks:
+      - monitoring
+      - job-matching_default
+
+  mongodb_exporter:
+    image: percona/mongodb_exporter:0.42.0
+    container_name: mongodb_exporter
+    environment:
+      MONGODB_URI: "mongodb://jobs_mongo:27017"
+    ports:
+      - "9216:9216"
+    command:
+      - '--collect-all'
+      - '--discovering-mode'
+    networks:
+      - monitoring
+      - job-matching_default
+
+networks:
+  monitoring:
+    name: monitoring_network
+  job-matching_default:
+    external: true
+    name: job-matching_default
+
+volumes:
+  prometheus_data:
+  grafana_data:
